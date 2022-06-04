@@ -1,0 +1,274 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styleMain.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet" />
+  <script type="text/javascript" src="https://code.jquery.com/jquery.js"></script>
+  <title>Tic-Tac-Toe</title>
+</head>
+
+<body>
+  <form method="post">
+    <main class="background">
+      <h1 class="title">Tic Tac Toe</h1>
+      <section class="player">
+        Player X: <span id="player_x"></span><br />
+        Player O: <span id="player_o"> </span>
+      </section>
+
+      <section class="display" id="turn">
+        Player <span class="display-player" id="role"></span>'s turn
+      </section>
+
+      <section class="container">
+        <div class="square" id="11" value=""></div>
+        <div class="square" id="21" value=""></div>
+        <div class="square" id="31" value=""></div>
+        <div class="square" id="12" value=""></div>
+        <div class="square" id="22" value=""></div>
+        <div class="square" id="32" value=""></div>
+        <div class="square" id="13" value=""></div>
+        <div class="square" id="23" value=""></div>
+        <div class="square" id="33" value=""></div>
+      </section>
+
+      <section class="controls">
+        <button id="reset">Reset</button>
+        <button id="logout">Logout</button>
+      </section>
+    </main>
+    <!-- pop up for player win -->
+    <section class="bg-popup">
+      <div class="content-popup">
+        <div class="player-win">Players 1 is the winner !!</div>
+        <div class="controls-popup">
+          <button class="playagain">Play Again</button>
+          <button class="exit">Exit</button>
+        </div>
+      </div>
+    </section>
+    <!-- End Pop up -->
+  </form>
+
+  <script type="text/javascript">
+    //Variabel
+    var player1 = "";
+    var player2 = "";
+    var checkwin = null;
+    // end variabel
+
+    //FUNCTION 
+    function ShowPopup(text) {
+      $(".bg-popup").show();
+      $(".content-popup").show();
+      $(".player-win").html(text);
+    }
+
+    function get_table() {
+      $.post("ajax_readtable.php").done(function (data) {
+        var jResult = JSON.parse(data);
+        let i = 0;
+        while (jResult[i]) {
+          if (jResult[i].role == "X") {
+            $("#" + jResult[i].id).html("<img src='assets/cross.png'>");
+            $("#" + jResult[i].id).attr("value", "X");
+          } else if (jResult[i].role == "O") {
+            $("#" + jResult[i].id).html("<img src='assets/circle.png'>");
+            $("#" + jResult[i].id).attr("value", "O");
+          }
+          i++;
+        }
+      });
+    }
+    function get_user() {
+      $.post("ajax_getlogin.php").done(function (data) {
+        var jResult = JSON.parse(data);
+        $("#player_x").html(jResult[0].iduser);
+        $("#player_o").html(jResult[1].iduser);
+        player1 = jResult[0].iduser;
+        player2 = jResult[1].iduser;
+        if (jResult[0].role == "X" && jResult[0].turn == 1) {
+          $("#role").html(jResult[0].iduser);
+        } else if (jResult[1].role == "O" && jResult[1].turn == 1) {
+          $("#role").html(jResult[1].iduser);
+        }
+      });
+    }
+    function winning_condition() {
+      var text_win_1 = $("#player_x").html() + " Win.";
+      var text_win_2 = $("#player_o").html() + " Win.";
+
+      for (var i = 1; i <= 3; i++) {
+        if (
+          $("#" + i + "1").attr("value") != "" &&
+          $("#" + i + "2").attr("value") != "" &&
+          $("#" + i + "3").attr("value") != ""
+        ) {
+          // umtuk vertikal/ column
+          if (
+            $("#" + i + "1").attr("value") == $("#" + i + "2").attr("value") &&
+            $("#" + i + "2").attr("value") == $("#" + i + "3").attr("value")
+          ) {
+            console.log(1);
+            if (player1 == $("#role").html()) {
+              ShowPopup(text_win_2);
+              clearInterval(checkwin);
+            } else if (player2 == $("#role").html()) {
+              ShowPopup(text_win_1);
+              clearInterval(checkwin);
+            }
+          }
+        }
+        // untuk horizontal / baris
+        else if (
+          $("#1" + i).attr("value") != "" &&
+          $("#2" + i).attr("value") != "" &&
+          $("#3" + i).attr("value") != ""
+        ) {
+          if (
+            $("#1" + i).attr("value") == $("#2" + i).attr("value") &&
+            $("#1" + i).attr("value") == $("#3" + i).attr("value") &&
+            $("#2" + i).attr("value") == $("#3" + i).attr("value")
+          ) {
+            if (player1 == $("#role").html()) {
+              ShowPopup(text_win_2);
+              clearInterval(checkwin);
+            } else if (player2 == $("#role").html()) {
+              ShowPopup(text_win_1);
+              clearInterval(checkwin);
+            }
+          }
+        }
+      }
+
+      // untuk diagonal kiri atas kanan bawah 
+      if (
+        $("#11").attr("value") != "" &&
+        $("#22").attr("value") != "" &&
+        $("#33").attr("value") != ""
+      ) {
+        if (
+          $("#11").attr("value") == $("#22").attr("value") &&
+          $("#11").attr("value") == $("#33").attr("value") &&
+          $("#22").attr("value") == $("#33").attr("value")
+        ) {
+          if (player2 == $("#role").html()) {
+            ShowPopup(text_win_1);
+            clearInterval(checkwin);
+          } else if (player1 == $("#role").html()) {
+            ShowPopup(text_win_2);
+            clearInterval(checkwin);
+          }
+        }
+      }
+      // untuk diagonal kanan atas kiri bawah
+      else if (
+        $("#31").attr("value") != "" &&
+        $("#22").attr("value") != "" &&
+        $("#13").attr("value") != ""
+      ) {
+        if (
+          $("#31").attr("value") == $("#22").attr("value") &&
+          $("#31").attr("value") == $("#13").attr("value") &&
+          $("#22").attr("value") == $("#13").attr("value")
+        ) {
+          if (player2 == $("#role").html()) {
+            ShowPopup(text_win_1);
+            clearInterval(checkwin);
+          } else if (player1 == $("#role").html()) {
+            ShowPopup(text_win_2);
+            clearInterval(checkwin);
+          }
+        }
+      }
+
+      // untuk draw
+      if (
+        $("#11").attr("value") != "" &&
+        $("#22").attr("value") != "" &&
+        $("#33").attr("value") != "" &&
+        $("#31").attr("value") != "" &&
+        $("#21").attr("value") != "" &&
+        $("#13").attr("value") != "" &&
+        $("#12").attr("value") != "" &&
+        $("#23").attr("value") != "" &&
+        $("#32").attr("value") != ""
+      ) {
+        ShowPopup("Draw!!");
+        clearInterval(checkwin);
+      }
+    }
+
+    function Reset() {
+      var txt = "reset";
+      $.ajax({
+        url: "ajax_remove.php",
+        data: {
+          pilihan: txt,
+        },
+        method: "post",
+        success: function (data) {
+          location.reload();
+        },
+      });
+    }
+
+    function Logout() {
+      Reset();
+      $.ajax({
+        url: "ajax_remove.php",
+        data: {
+          pilihan: "logout",
+        },
+        method: "post",
+        success: function (data) {
+          $(location).prop("href", "loginPage.html");
+        },
+      });
+    }
+    // End Function
+
+    $("body").on("click", "div", function () {
+      var choose = $(this).attr("id");
+      //alert(choose);
+      $.ajax({
+        url: "ajax_index.php",
+        data: {
+          pilihan: choose,
+        },
+        method: "post",
+        success: function (data) {
+
+        },
+      });
+    });
+
+    $(document).ready(function () {
+      setInterval(get_table, 1000);
+      setInterval(get_user, 1000);
+      checkwin = setInterval(winning_condition, 1000);
+      $(".bg-popup").hide();
+      $(".content-popup").hide();
+    });
+
+    $("#reset").on("click", function () {
+      Reset();
+    });
+    $(".playagain").on("click", function () {
+      Reset();
+    });
+    $("#logout").on("click", function () {
+      Logout();
+    });
+    $(".exit").on("click", function () {
+      Logout();
+    });
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styleLogin.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <title>Tic-Tac-Toe</title>
+</head>
+
+<body>
+    <Form class="background" method="post">
+        <div class="title">
+            <h1>Tic Tac Toe</h1>
+        </div>
+        <div class="subTitle">
+            LOGIN USER
+        </div>
+        <div class="container">
+            <div class="user">
+                <label>Username: <input type="text" class="inputUsername"></label>
+            </div>
+            <div class="role">
+                Role:
+                <input type="radio" id="role_X" name="role" value="X" checked="checked">
+                <label for="X">X</label>
+                <input type="radio" id="role_O" name="role" value="O">
+                <label for="O">O</label>
+            </div>
+            <button id="btnlogin">Login</button>
+        </div>
+    </Form>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $("#btnlogin").click(function () {
+        var username = $(".inputUsername").val();
+        var radioValue = $("input[name='role']:checked").val();
+
+        $.post('ajax_login.php', {
+            name: username,
+            role: radioValue
+        }).done(function (data) {
+            
+        });
+        window.location.href='tictactoe.html';
+        return false;
+    });
+</script>
+
+</html>

@@ -1,0 +1,149 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Itim', cursive;
+  }
+  .background {
+    background-color: #007fb1;
+    height: 100vh;
+    padding: 2px;
+  }
+  .title {
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    margin-top: 2%;
+  }
+  .player{
+    color: #81ffff;
+    text-align: center;
+    /* margin-left: 10%; */
+    font-size: 25px;
+  }
+  .display {
+    color: white;
+    font-size: 25px;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 20px;
+  }
+  .container{
+    justify-content: center;
+    align-content: center;
+    display: grid;
+    margin: 60px auto;
+    grid-template-columns: 40% 40% 40%;
+    grid-template-rows: 40% 40% 40%;
+    width: 500px;
+  }
+  .square{
+    border: 1px solid white;
+    min-width: 150px;
+    min-height: 150px;
+    display: flex;
+    align-content: center;
+    font-size: 50px;
+    cursor: pointer;
+  }
+  .controls button {
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    font-size: 20px;
+    margin-left: 1em;
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
+  }
+  #reset, #logout{
+    background-color: #FF3860;
+  }
+  .controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
+  }
+  .bg-popup{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0,0.5);
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .content-popup{
+    height: 200px;
+    width: 500px;
+    background-color: white;
+    border-radius: 10px;
+    box-sizing: border-box;
+    opacity: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .player-win{
+   text-align: center;
+  }
+  .controls-popup{
+    margin-top: 10px;
+    justify-content: space-between;
+    padding: 5px;
+  }
+  .playagain, .exit{
+    background-color: #FF3860;
+    width: 100px;
+    height: 30px;
+    margin-left: 1em;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  @media (min-width:336px) and (max-width:699px){
+    .background {
+      height: 800vh;
+      width: 100vh;
+    }
+    .square{
+      min-width: 150px;
+      min-height: 150px;
+      font-size: 40px;
+    }
+    .container{
+      grid-template-columns: 35% 35% 35%;
+      grid-template-rows: 35% 35% 35%;
+    }
+    .title {
+      font-size: 30px;
+    }
+    .display {
+      font-size: 20px;
+    }
+    .controls {
+      margin-top: 50px;
+    }
+  }
+
